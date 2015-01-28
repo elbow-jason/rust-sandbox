@@ -2,10 +2,11 @@ fn main() {
   use std::thread::Thread;
   use std::sync::mpsc;
 
+  // set up channels for comms to and from main from thread
   let (tx_to_main, rx_in_main): (mpsc::Sender<u64>, mpsc::Receiver<u64>) = mpsc::channel();
   let (tx_to_thread, rx_in_thread): (mpsc::Sender<u64>, mpsc::Receiver<u64>) = mpsc::channel();
 
-  // spawn thread with 
+  // spawn thread with loop and channels for tx and rx to and from fnmain
   Thread::spawn(move || {
     loop {
       let rxed_val = rx_in_thread.recv().unwrap();
@@ -18,7 +19,7 @@ fn main() {
     tx_to_main.send(0);
   });
 
-  //uncomment this block to compare speeds
+  //uncomment this block to compare speeds of simple addition vs thread csp
   /* 
   Thread::spawn(move || {
     let mut x: u64 = 1;
