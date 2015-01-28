@@ -15,6 +15,8 @@ fn main() {
     }
   });
 
+  //uncomment this block to compare speeds
+  /* 
   Thread::spawn(move || {
     let mut x: u64 = 1;
     loop {
@@ -23,6 +25,7 @@ fn main() {
       x = x + 1;
     }
   });
+  */
 
   let initial_val = 1u64;
   println!("initial_val outside loop {}", initial_val);
