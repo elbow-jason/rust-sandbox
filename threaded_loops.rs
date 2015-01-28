@@ -5,6 +5,7 @@ fn main() {
   let (tx_to_main, rx_in_main): (mpsc::Sender<u64>, mpsc::Receiver<u64>) = mpsc::channel();
   let (tx_to_thread, rx_in_thread): (mpsc::Sender<u64>, mpsc::Receiver<u64>) = mpsc::channel();
 
+  // spawn thread with 
   Thread::spawn(move || {
     loop {
       let rxed_val = rx_in_thread.recv().unwrap();
@@ -29,10 +30,12 @@ fn main() {
   });
   */
 
+  // initialize to 1
   let initial_val = 1u64;
   println!("initial_val outside loop {}", initial_val);
   tx_to_thread.send(initial_val);
 
+  // main's loop
   loop {
     let rxed_val = rx_in_main.recv().unwrap();
     println!("rxed_val in main loop {}", rxed_val);
@@ -40,6 +43,8 @@ fn main() {
     if result > 10000 { break; }
     tx_to_thread.send(result);
   }
+
+  // stop and clean up thread
   tx_to_thread.send(0);
   let exit_code = rx_in_main.recv().unwrap();
   println!("thread exited with code {}", exit_code);
