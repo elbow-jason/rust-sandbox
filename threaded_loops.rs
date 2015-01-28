@@ -13,7 +13,8 @@ fn main() {
       let result = add_one(rxed_val);
       tx_to_main.send(result);
     }
-    println!("exiting spawned thread")
+    println!("exiting spawned thread");
+    tx_to_main.send(0);
   });
 
   //uncomment this block to compare speeds
@@ -40,7 +41,9 @@ fn main() {
     tx_to_thread.send(result);
   }
   tx_to_thread.send(0);
-  println!("fin?");
+  let exit_code = rx_in_main.recv().unwrap();
+  println!("thread exited with code {}", exit_code);
+  println!("fin!!!");
 
 
 }
