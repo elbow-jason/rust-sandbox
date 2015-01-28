@@ -8,11 +8,12 @@ fn main() {
   Thread::spawn(move || {
     loop {
       let rxed_val = rx_in_thread.recv().unwrap();
-      if rxed_val > 1000 {break;}
+      if rxed_val == 0 { break;}
       println!("rxed_val inside looped thread {}", rxed_val);
       let result = add_one(rxed_val);
       tx_to_main.send(result);
     }
+    println!("exiting spawned thread")
   });
 
   //uncomment this block to compare speeds
@@ -35,11 +36,11 @@ fn main() {
     let rxed_val = rx_in_main.recv().unwrap();
     println!("rxed_val in main loop {}", rxed_val);
     let result = add_one(rxed_val);
-    if result > 1000 { break; }
+    if result > 10000 { break; }
     tx_to_thread.send(result);
   }
-  tx_to_thread.send(1001);
-  println!("fin");
+  tx_to_thread.send(0);
+  println!("fin?");
 
 
 }
